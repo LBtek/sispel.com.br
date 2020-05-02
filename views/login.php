@@ -8,7 +8,7 @@
 </head>
 <body>
     <form method="POST" action=<?php echo BASE_URL."login/logar"; ?>>
-        <h3>www.sispelt.com.br</h3>
+        <h3>www.sispel.com.br</h3>
         <br>
 
         <label for="email">E-mail:</label><br>

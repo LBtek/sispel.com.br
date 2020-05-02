@@ -25,7 +25,7 @@ class Ponto extends model {
         }
     }
 /*-----------------------------------------------------------------------------------------------------------*/
-    public function setPonto($hours, $periodo = "", $date = "", $idPonto = "", $idUser = "") {
+    public function setPonto($hours, $periodo = "", $date = "", $idPonto = "", $idUser = "", $th = "") {
         $this->state = false;
         
         if ($idUser != "" && $date != "" && $hours != "") {
@@ -44,6 +44,14 @@ class Ponto extends model {
 
         if($this->state) {
             $this->sql->bindValue(':ponto', addslashes($hours));
+            $this->sql->execute();
+        }
+
+        if($idPonto != "" && $th != "" && $hours == "") {
+            $this->sql = "UPDATE ponto SET thrs = :thrs WHERE id = :idPonto";
+            $this->sql = $this->db->prepare($this->sql);
+            $this->sql->bindValue(':idPonto', addslashes($idPonto));
+            $this->sql->bindValue(':thrs', addslashes($th));
             $this->sql->execute();
         }
     }

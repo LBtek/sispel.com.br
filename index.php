@@ -1,6 +1,6 @@
 <?php
 session_start();
-define("BASE_URL", "http://localhost/Projetos/estrutura_mvc/");
+define("BASE_URL", "http://localhost/Projetos/Sistema_Ponto/");
 
 spl_autoload_register(function($class) {
 

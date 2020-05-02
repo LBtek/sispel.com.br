@@ -11,6 +11,7 @@ class loginController extends controller {
 
     public function logar() {
         require 'config.php';
+        
         if(isset($_POST['email']) && trim($_POST['email']) != "" && isset($_POST['senha']) && trim($_POST['senha']) != "") {
             $email = addslashes($_POST['email']);
             $senha = md5($_POST['senha']);
