@@ -5,6 +5,20 @@ class homeController extends controller {
         if(!isset($_SESSION['id']) || $_SESSION['id'] == '') {
             $this->loadView('login');
         } else {
+            require 'config.php'; 
+
+            if(isset($_FILES['photo'])) {
+                $img = $_FILES['photo'];
+                if(isset($_SESSION['imgPerfil']) && $_SESSION['imgPerfil'] != "") {
+                    unlink('assets/images/'.$_SESSION['imgPerfil']);  
+                }
+                $tmpname = time().".jpg";
+                move_uploaded_file($img['tmp_name'], 'assets/images/'.$tmpname);
+                $u = new Users();
+                $u->setImg($tmpname, $_SESSION['id']);
+                $_SESSION['imgPerfil'] = $tmpname;
+            }
+
             $this->loadTemplate('home');
         }
     }

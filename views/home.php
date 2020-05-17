@@ -1,54 +1,58 @@
-<?php require 'config.php'; ?>
+<header>
+    <button id="btnregister">Registrar</button>
+</header>
 
-<div class="card">
-    <div class="row">
-        <div id="btnregister">
-            Registrar
-        </div>
+<table>
+    <thead>
+        <tr>
+            <th>Data</th> <th>Entrada</th> <th>Saída</th> <th>Entrada</th> <th>Saída</th> <th>Tempo Total</th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        <?php
+            $p = new Ponto();
+            $sqlResponse = $p->getPonto($_SESSION['id']);
+            date_default_timezone_set('UTC');
 
-        <a href=<?php echo BASE_URL."logof"; ?>>Sair</a>
-    </div>
+            $semana = array(
+                'Sun' => 'Domingo',
+                'Mon' => 'Seg',
+                'Tue' => 'Ter',
+                'Wed' => 'Qua',
+                'Thu' => 'Qui',
+                'Fri' => 'Sex',
+                'Sat' => 'Sábado'
+            );
 
-    <br>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Dia</th> <th>Entrada</th> <th>Saída</th> <th>Entrada</th> <th>Saída</th> <th>Total H</th>
-            </tr>
-        </thead>
-        
-        <tbody>
-            <?php
-                $p = new Ponto();
-                $sqlResponse = $p->getPonto($_SESSION['id']);
-                date_default_timezone_set('UTC');
-
-                if($sqlResponse->rowCount() > 0) {
-                    foreach(array_reverse($sqlResponse->fetchAll()) as $value): ?>                
+            if($sqlResponse->rowCount() > 0) {
+                foreach(array_reverse($sqlResponse->fetchAll()) as $value): ?>
+                    <?php if(date("m", strtotime($value['date'])) == date("m")): ?>               
                         <tr>
-                            <td><?php echo $value['date']; ?></td>
+                            <td><?php echo date("d.m.y", strtotime($value['date']))." - ".$semana[date("D", strtotime($value['date']))]; ?></td>
                             <td><?php echo $value['hrs_entrada_mat']; ?></td>
                             <td><?php echo $value['hrs_saida_mat'] != "" ? $value['hrs_saida_mat'] : " -- : -- : -- "; ?></td>
                             <td><?php echo $value['hrs_entrada_vesp'] != "" ? $value['hrs_entrada_vesp'] : " -- : -- : -- "; ?></td>
                             <td><?php echo $value['hrs_saida_vesp'] != "" ? $value['hrs_saida_vesp'] : " -- : -- : -- "; ?></td>
                             <td><?php echo $value['thrs'] != "" && $value['thrs'] != 0 ? date("H:i:s", $value['thrs']) : " -- : -- : -- "; ?></td>
                         </tr>
-            <?php 
-                    endforeach;
-                } else {
-                    echo "<tr>
-                            <td> -- : -- : -- </td>
-                            <td> -- : -- : -- </td>
-                            <td> -- : -- : -- </td>
-                            <td> -- : -- : -- </td>
-                            <td> -- : -- : -- </td>
-                            <td> -- : -- : -- </td>
-                        </tr>";
-                }
-            ?>
-        </tbody>
-    </table>
-</div>
+                    <?php endif; ?>
+        <?php 
+                endforeach;
+            } else {
+                echo "<tr>
+                        <td> -- : -- : -- </td>
+                        <td> -- : -- : -- </td>
+                        <td> -- : -- : -- </td>
+                        <td> -- : -- : -- </td>
+                        <td> -- : -- : -- </td>
+                        <td> -- : -- : -- </td>
+                    </tr>";
+            }
+        ?>
+    </tbody>
+</table>
+
 <script>
     function registrar() {
         let req = new XMLHttpRequest();
@@ -63,7 +67,7 @@
             }           
         }
 
-        req.open('GET', 'http://luandevweb.com/Sistema%20Ponto/hora.php');
+        req.open('GET', 'http://luandevweb.com/Sistema_Ponto/hora.php');
         req.send(); 
     }
 

@@ -16,17 +16,24 @@ class loginController extends controller {
             $email = addslashes($_POST['email']);
             $senha = md5($_POST['senha']);
             $u = new Users();
-            $id = $u->getUserId($email, $senha);
+            $user = $u->getUser($email, $senha);
             
-            if($id != '' && is_numeric($id)) {
-                $_SESSION['id'] = $id;
+            if(isset($user['id']) && $user['id'] != '') {
+                $_SESSION['id'] = $user['id'];
+                $_SESSION['email'] = $user['email'];
+
+                if(isset($user['img']) && $user['img'] != '') {
+                    $_SESSION['imgPerfil'] = $user['img'];
+                } 
+                
                 echo "<script>window.location.href='".BASE_URL."';</script>";
             } else {
                 $dados['msg'] = "Acesso Negado!<br>E-mail e/ou Senha Inválidos.";
                 $this->loadView('login', $dados);
             }
         } else {
-            echo "<script>window.location.href='".BASE_URL."';</script>";
+            $dados['msg'] = "Acesso Negado!<br>E-mail e/ou Senha Inválidos.";
+            $this->loadView('login', $dados);
         }    
     }
 }
